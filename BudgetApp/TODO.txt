@@ -1,0 +1,14 @@
+Functionality
+-----------
+- Add page for showing historical months of income, expenses, savings/loss (show trend chart as well)
+
+Other
+-----------
+- Email admin about new users
+
+- Fix errors to be logged to a place on the server for later examination and email admin about issues
+
+- Fix default admin to have password stored away somewhere else, allow admin to have some greater privileges
+
+
+

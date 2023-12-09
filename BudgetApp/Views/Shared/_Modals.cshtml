@@ -1,0 +1,130 @@
+﻿<div id="confirmModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header fill-theme">
+                <h5 class="modal-title">Warning</h5>
+            </div>
+            <div class="modal-body text-theme">
+                Default Modal Text
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-theme-contrast" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-theme btn-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header fill-theme">
+                <h5 class="modal-title">Insert Title</h5>
+            </div>
+            <div class="modal-body text-theme">
+                Insert Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-theme" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="errorModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header error-theme">
+                <h5 class="modal-title">Insert Title</h5>
+            </div>
+            <div class="modal-body text-danger">
+                Insert Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-theme" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="infoModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header fill-theme">
+                <h5 class="modal-title">Insert Title</h5>
+            </div>
+            <div class="modal-body text-theme">
+                Insert Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-theme" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function ShowConfirmModal(message, action)
+    {
+        let modal = $("#confirmModal");
+        modal.find(".modal-body").text(message);
+
+        //unbind any previously bound click events
+        modal.find(".btn-confirm").off();
+
+        modal.find(".btn-confirm").click(() => {
+            modal.modal('hide');
+            ConfirmAction(action);
+        })
+
+        modal.modal('show');
+    }
+
+    function ShowInfoModal(title, message)
+    {
+        let modal = $("#infoModal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").text(message);
+        modal.modal('show');
+    }
+
+    function ShowSuccessModal(title, message, returnUrl)
+    {
+        
+        let modal = $("#successModal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").text(message);
+
+        modal.find(".btn").click(function()
+        {
+            modal.modal('hide');
+            window.location.href = returnUrl;
+        })
+
+        modal.modal('show');
+    }
+
+    function ShowErrorModal(title, message)
+    {
+        let modal = $("#errorModal");
+        modal.find(".modal-title").text(title);
+        modal.find(".modal-body").text(message);
+        modal.modal('show');
+    }
+
+    function ConfirmAction(action) {
+        $.get(action, function (response) {
+            if (response.status == "success") {
+                $("#confirmModal").modal('hide');
+                ShowSuccessModal(response.title, response.message, response.returnUrl);
+            }
+            else 
+            {
+                $("#confirmModal").modal('hide');
+                ShowErrorModal(response.title, response.message);
+            }
+        });
+    }
+
+</script>

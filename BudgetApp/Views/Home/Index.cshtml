@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-left">
+    <h1 class="display-4 text-theme">Welcome</h1>
+    <p>
+        You will need to enter your monthly incomes, recurring (fixed) costs each month, and your monthly savings goal.
+        What amount is left after taking savings into consideration will be your month to month "Budget". This amount will be distributed
+        across different cost categories that you will configure to personalize your budget. Once you have these set up, you can start recording your purchases
+        and tracking your actual to budgeted costs in your personal dashboard.
+    </p>
+    <div class="mt-4">
+        <a class="btn btn-large btn-theme" asp-controller="Budget" asp-action="Create">Create New Budget</a>
+        <p class="my-3">
+            (<strong>NOTE:</strong> You can also join another budget that already exists.
+            In order to do this, the owner of the budget must invite you, and you will receive an invite to a link to join)
+        </p>
+    </div>
+</div>

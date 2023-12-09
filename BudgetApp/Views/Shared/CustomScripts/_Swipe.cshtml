@@ -1,0 +1,83 @@
+﻿<script type="text/javascript">
+
+    //obtain the array of slide elements
+    let slideSpeed = 100;
+    const slides = $(".slide");
+    const slideContainer = $(".slide-container");
+    let currentIndex = 0;
+    let length = slides.length;
+
+    /*
+        Sliding effect uses a single container that
+        creates an illusion of being multiple containers.
+        However, it is only one container that slides out of the picture,
+        and then repositions itself on the other side. After sliding out of the picture,
+        it replaces the internal content and then slides back in view
+    */
+    function PreviousSlide() {
+        //check to make sure we have previous slide
+        if (currentIndex > 0) {
+            let currentSlide = slides[currentIndex];
+            let prevSlide = slides[currentIndex - 1];
+
+            //move the current slide to the right
+            slideContainer.animate({
+                left: "+=100%"
+            }, slideSpeed, function () {
+
+                //swap slide frames
+                $(currentSlide).hide();
+                $(prevSlide).show();
+
+                //reposition the container on the left side
+                $(this).css("left", "-100%");
+
+                //move the container from left to right
+                $(this).animate({
+                    left: "0"
+                }, slideSpeed);
+            });
+
+            currentIndex -= 1;
+        }
+
+    }
+
+    function NextSlide() {
+        //check to make sure we have a next slide
+        if (currentIndex < (length - 1)) {
+            let currentSlide = slides[currentIndex];
+            let nextSlide = slides[currentIndex + 1];
+
+            //move the slide container to the left
+            slideContainer.animate({
+                left: "-=100%"
+            }, slideSpeed, function () {
+
+                //swap slide frame
+                $(currentSlide).hide();
+                $(nextSlide).show();
+
+                //reposition the container on the right side
+                $(this).css("left", "100%");
+
+                //move the container from right to left
+                $(this).animate({
+                    left: "0"
+                }, slideSpeed);
+            });
+            currentIndex += 1;
+        }
+    }
+
+    let slideElement = document.getElementById("slide-container");
+    var mc = new Hammer(slideElement);
+
+    mc.on("swipeleft", function () {
+        NextSlide();
+    });
+
+    mc.on("swiperight", function () {
+        PreviousSlide();
+    });
+</script>

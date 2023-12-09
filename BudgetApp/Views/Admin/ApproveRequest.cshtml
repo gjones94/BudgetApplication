@@ -1,0 +1,22 @@
+﻿@using BudgetApp.ViewModels.AdminViewModels;
+@model ApprovalVM 
+
+<div class="row text-theme text-center mb-4">
+    <h1 class="display-4">
+        User Approval
+    </h1>
+</div>
+<div class="form-row my-2">
+    <div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+        @Html.Label("", "User: ", new { @class = "h3 me-2 text-theme"})
+        @Html.Label("", Model.FullName, new { @class = "h4 me-2"})
+    </div>
+</div>
+<div class="form-row mt-4">
+    <button class="col-md-4 offset-md-4 col-8 offset-2 p-md-3 p-2 btn btn-theme mb-4" onclick="location.href='@Url.Action("ApproveResponse", "Admin", new { userId = Model.UserId, approved = true })'">
+        Approve
+    </button>
+    <button class="col-md-4 offset-md-4 col-8 offset-2 p-md-3 p-2 btn btn-theme" onclick="location.href='@Url.Action("ApproveResponse", "Admin", new { userId = Model.UserId, approved = false })'">
+        Reject
+    </button>
+</div>

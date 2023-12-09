@@ -1,0 +1,27 @@
+﻿@using BudgetApp.ViewModels.UserViewModels;
+@model UserRoleEditVM
+
+<div class="row text-theme text-center mb-4">
+    <h1 class="display-4">
+        Edit User
+    </h1>
+</div>
+<form method="post" asp-action="Edit" asp-controller="User">
+    <input asp-for="@Model.ReturnUrl" type="hidden" />
+    <input asp-for="@Model.EntityId" type="hidden" />
+    <input asp-for="@Model.UserId" type="hidden" />
+    <div class="form-row"> 
+        <div class="form-group col-md-4 offset-md-4 col-8 offset-2 mb-3">
+            @Html.LabelFor(m => m.Name, new { @class = "text-theme d-block"})
+            @Html.DisplayFor(m => m.Name, new { @class = "form-control col-12"})
+        </div>
+        <div class="form-group col-md-4 offset-md-4 col-8 offset-2 mb-5">
+            @Html.LabelFor(m => m.AvailableRoles, new { @class = "text-theme"})
+            @Html.DropDownListFor(m => m.SelectedRole, new SelectList(Model.AvailableRoles), "---", new { @class = "form-control"})
+        </div>
+    </div>
+    <div class="row">
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme mb-4" type="submit">Save</button>
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme" type="button" onclick="location.href='@Model.ReturnUrl'">Cancel</button>
+    </div>
+</form>

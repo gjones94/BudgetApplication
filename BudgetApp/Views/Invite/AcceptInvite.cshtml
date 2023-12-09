@@ -1,0 +1,42 @@
+﻿@using BudgetApp.ViewModels.InviteViewModels;
+@model InviteVM
+
+<form id="accept-invite" method="post" asp-action="AcceptInvite" asp-controller="Invite">
+    <div class="row text-center">
+        <input type="hidden" asp-for="@Model.InviteId" />
+        <input id="accept" type="hidden" asp-for="@Model.InvitationAccepted" />
+        <div class="col-12 h5">
+            @Model.InviterName has invited you to join their budget!
+        </div>
+    </div>
+    <div class="row text-center my-md-3 my-5">
+        <div class="col-12">
+            <button id="btn-accept" type="button" class="col-md-4 col-8 btn btn-theme py-3">Accept</button>
+        </div>
+    </div>
+    <div class="row text-center my-md-3 my-5">
+        <div class="col-12">
+            <button id="btn-decline" type="button" class="col-md-4 col-8 btn btn-theme py-3">Decline</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("#btn-accept").click(function()
+            {
+                $("#accept").val("True");
+                $("#accept-invite").submit();
+            })
+
+            $("#btn-decline").click(function()
+            {
+                $("#accept").val("False");
+                $("#accept-invite").submit();
+            })
+        })
+    </script>
+}

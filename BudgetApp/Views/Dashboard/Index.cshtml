@@ -1,0 +1,29 @@
+﻿@using BudgetApp.ViewModels.CostCategoryViewModels;
+@using Newtonsoft.Json;
+@model BudgetApp.ViewModels.DashboardViewModels.DashboardVM
+
+<div style="overflow: hidden">
+    <div id="slide-container" class="slide-container">
+        @await Html.PartialAsync("_PieChart.cshtml", Model)
+
+        @await Html.PartialAsync("_BudgetToActual.cshtml", Model.CategoryBTAList)
+
+        @await Html.PartialAsync("_BarChart.cshtml", Model.CategoryBTAList)
+
+    </div>
+</div>
+
+@section Scripts
+{
+    @await Html.PartialAsync("~/Views/Shared/CustomScripts/_Swipe.cshtml")
+    @await Html.PartialAsync("~/Views/Shared/CustomScripts/_DetailToggler.cshtml")
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            DrawPieChart();
+
+            DrawBarChart();
+        });
+    </script>
+}

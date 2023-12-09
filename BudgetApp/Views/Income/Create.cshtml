@@ -1,0 +1,27 @@
+﻿@model BudgetApp.ViewModels.IncomeViewModels.IncomeCreateEditVM
+
+<div class="row text-theme text-center mb-4">
+    <h1 class="display-4">
+        Create Income
+    </h1>
+</div>
+<form method="post" asp-action="Create" asp-controller="Income">
+    <input asp-for="@Model.ReturnUrl" type="hidden" />
+    <input asp-for="@Model.ParentId" type="hidden" />
+    <div class="form-row my-2">
+        @Html.EditorFor(m => m.IncomeVM)
+        <div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+            @Html.LabelFor(m => m.AvailableUsers, new { @class = "text-theme" })
+            @Html.DropDownListFor(m => m.UserId, new SelectList(Model.AvailableUsers, "Id", "FullName"), new { @class = "form-control"})
+            @Html.ValidationMessageFor(m => m.AvailableUsers, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-3">
+            @Html.LabelFor(m => m.IncomeVM.Recurring, new { @class = "text-theme" })
+            @Html.CheckBoxFor(m => m.IncomeVM.Recurring, new { @class = "form-check-input", @type = "checkbox"})
+        </div>
+    </div>
+    <div class="form-row mt-4">
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme mb-4" type="submit">Create</button>
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme" type="button" onclick="location.href='@Model.ReturnUrl'">Cancel</button>
+    </div>
+</form>

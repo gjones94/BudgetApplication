@@ -1,0 +1,159 @@
+﻿@using BudgetApp.ViewModels;
+@using BudgetApp.ViewModels.VariableCostViewModels;
+@model VariableCostPurchasesVM
+
+<div class="row mb-5">
+    <label class="text-theme">Filter By Category</label>
+    <div class="col-md-2 col-4">
+        @Html.DropDownList("Categories", new SelectList(Model.AvailableCategories), "All", new { @class = "form-control", id = "category-selected"})
+    </div>
+</div>
+
+<div class="row m-0">
+    <div class="col-12">
+        <div id="expenseTable">
+            <div class="row header-theme header-row text-center rounded-top rounded-2 p-2">
+                <div class="column-header col-4" data-sort-key="category" data-sort-order="asc">Category</div>
+                <div class="column-header col-4" data-sort-key="amount" data-sort-order="asc">Amount</div>
+                <div class="column-header col-4" data-sort-key="date" data-sort-order="asc">Date</div>
+            </div>
+
+            <div class="row disabled-input text-center py-2 border border-start border-end rounded-2 no-data-available" style="display: none">
+                <div class="col-12 h6 p-0 m-0">
+                    No Data Available
+                </div>
+            </div>
+
+            @foreach (VariableCostVM variableCost in Model.VariableCosts)
+            {
+            <div class="row row-theme text-center data-row border-bottom border-start border-end rounded-2 toggler mt-1">
+                <div class="container">
+                    <div class="row my-2" style="cursor: pointer">
+                        <div class="data col-4" data-sort="category">@variableCost.CategoryName</div>
+                        <div class="data col-4" data-sort="amount">@variableCost.Amount.GetCurrencyFormat()</div>
+                        <div class="data col-4" data-sort="date">@variableCost.DateIncurred.ToString("MM/dd/yyyy")</div>
+                    </div>
+                </div>
+                <div class="row m-0 fill-complement toggle-detail border rounded-2" style="display: none">
+                    <div class="col-8 p-0">
+                        <div class="row m-0">
+                            <div class="col-12 text-start" style="padding-block: 10px">
+                                @variableCost.Description
+                            </div>
+                            <div class="col-12 text-start align-text-top border-top" style="padding-block: 10px">
+                                @variableCost.NameOfUser
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 p-0 my-auto">
+                        <a href="@Url.Action("Edit", "VariableCost", new { variableCostId = variableCost.VariableCostId, returnUrl = Model.ReturnUrl})">
+                            <i class="bi icon-theme-contrast bi-pencil-square" style="font-size: 1.5rem"></i>
+                        </a>
+                    </div>
+                    <div class="col-2 p-0 my-auto">
+                        <a onclick="ShowConfirmModal('Are you sure you want to delete this item?', '@Url.Action("Remove", "VariableCost", new { variableCostId = variableCost.VariableCostId, returnUrl = Model.ReturnUrl})')">
+                            <i class="bi icon-theme-contrast bi-trash" style="font-size: 1.5rem"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    @await Html.PartialAsync("~/Views/Shared/CustomScripts/_DetailToggler.cshtml")
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            let rows = $(".data-row");
+
+            if(rows.length == 0)
+            {
+                $(".no-data-available").show();
+            }
+
+            $(".column-header").click(function(){
+                var sortKey = $(this).data('sort-key');
+                var sortOrder = $(this).data('sort-order');
+                sortTable(sortKey, sortOrder);
+
+                //flip the sort order to be the opposite of what it was
+                if(sortOrder === 'asc')
+                {
+                    $(this).data('sort-order', 'desc');
+                }
+                else
+                {
+                    $(this).data('sort-order', 'asc')
+                }
+            });
+
+            $("#category-selected").change(function(){
+                var categorySelected = $(this).val();
+                filterTable(categorySelected);
+            });
+        });
+
+        function sortTable(sortKey, sortOrder) {
+            var table = $("#expenseTable");
+            var header = table.find(".header-row").detach();
+            var rows = table.find(".data-row");
+
+            rows.sort(function(a, b){
+                var aValue = $(a).find('.data[data-sort="' + sortKey + '"]').text();
+                var bValue = $(b).find('.data[data-sort="' + sortKey + '"]').text();
+
+                var comparison = aValue.localeCompare(bValue);
+
+                //switch the sort based on this
+                return sortOrder == 'asc' ? comparison : -comparison
+            });
+
+            table.append(header).append(rows);
+        }
+
+        function filterTable(category)
+        {
+            let table = $("#expenseTable");
+            let header = table.find('.header-row').detach();
+            let rows = table.find('.data-row');
+            let filteredCount = 0;
+
+            rows.each(function(i, element){
+                let categoryValue = $(element).find('.data[data-sort="category"]').text();
+
+                if(category == "")
+                {
+                    $(this).show();
+                }
+                else if(categoryValue === category)
+                {
+                    filteredCount += 1;
+                    $(this).show();
+                }
+                else
+                {
+                    $(this).hide();
+                }
+            });
+
+
+            if(filteredCount == 0 && category != "")
+            {
+                table.append(header).append(table.find(".no-data-available"));
+                $(".no-data-available").show();
+            }
+            else
+            {
+                table.append(header).append(rows);
+                $(".no-data-available").hide();
+            }
+        }
+    </script>
+}
+

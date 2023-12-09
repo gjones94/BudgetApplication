@@ -1,0 +1,164 @@
+===========================================================================
+Basic Setup
+===========================================================================
+
+Project Creation
+===================================
+- Select Asp.Net Core Web App (MVC)
+- Select "Individual Accounts" for authentication type
+
+Packages
+===================================
+	MySqlConnector 2.2.6
+	MySql.EntityFrameworkCore 7.02
+
+
+Update appsettings.json
+===================================
+	- "ConnectionStrings": {
+		"MySqlConnection": "Server=localhost;User ID=root;Password=*******;Database=[DatabaseName]"
+	  },
+
+
+Update Program.cs
+===================================
+	- **Remove** builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+	- **Edit** var connectionString = builder.Configuration.GetConnectionString("MySqlConnection") ?? throw new InvalidOperationException("Connection string 'MySqlConnection' not found");
+	- **New** builder.Services.AddTransient<MySqlConnection>(_ => new MySqlConnection(connectionString));
+	- **Edit** builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
+
+	**NOTE** If you wish to do lazy loading, you have to explicitly configure this now. You must download MicrosoAft.EntityFrameworkCore.Proxies
+			 and then add it to your db connection "....options.UseLazyLoadingProxies().UseMySql(connectionString));"
+
+
+Add Custom Users and Roles from AspnetIdentity
+===================================
+
+	Place in Models folder 
+	----------------------------
+		Areas/Identity/Models/User
+		Areas/Identity/Models/Role
+
+	Update ApplicationDbContext
+	----------------------------
+		public class ApplicationDbContext : IdentityDbContext<User, Role, Guid>
+		{
+			public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+				: base(options)
+			{
+			}
+		}
+
+Update Program.cs (After custom user and role added)
+===================================
+	(User and Role are the custom IdentityUser and IdentityRole added)
+	- builder.Services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true) *Replace
+        .AddDefaultTokenProviders()
+        .AddDefaultUI() *//Problem if not included
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+Remove Existing Migration Folder 
+===================================
+	(Including the migration and the ApplicationDbContextModelSnapshot)
+
+
+Run Add-Migration "InitialCreate"
+===================================
+
+
+Add Identity Razor Pages
+===================================
+Right click on project
+	=>Select Add
+		=>New Scaffolded Item
+			=>Identity
+				=> Select "Override all files" (to be able to fully customize all views from identity razor pages)
+				=> Select Db Context Class already created
+
+	This will generate razor pages with the custom user and role you created as the identity objects for the UserManager and SignInManager
+
+
+Modify Views/Shared/_LoginPartial.cshtml to use custom user class instead of IdentityUser
+===================================
+	CHANGE
+		@inject SignInManager<IdentityUser> SignInManager
+		@inject UserManager<IdentityUser> UserManager
+	TO
+		@inject SignInManager<User> SignInManager
+		@inject UserManager<User> UserManager
+
+Seed Data
+===================================
+
+	Create class "~/Data/SeedData"	
+	  public static async Task<bool> Initialize(IServiceProvider serviceProvider)
+        {
+            //Make sure that you are making this method "Initialize()" return a task so that the calling thread can wait on this task
+
+            UserManager<User> UserManager  = serviceProvider.GetRequiredService<UserManager<User>>();
+            ApplicationDbContext dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+            if (dbContext == null)
+            {
+                return false;
+            }
+
+			//Add Roles through DbContext if you statically generate roles in your code.
+
+			//Add Users using UserManager
+
+			//Add User to Role using UserManager
+
+	-Program.cs
+	using (var scope = app.Services.CreateScope())
+	{
+		var services = scope.ServiceProvider;
+		var context = services.GetRequiredService<ApplicationDbContext>();
+		context.Database.Migrate(); //make sure to add this to allow database to autocreate before accessing it
+		await SeedData.Initialize(services);
+	}
+
+Setup Project Secrets File
+===================================
+	Open Package Manager Console
+		PM> dotnet user-secrets -p [ProjectName] init
+		PM> dotnet user-secrets -p [ProjectName] set "Key" "Value"
+		PM> dotnet user-secrets -P [ProjectName] remove "Key"
+
+	Accessing the secrets from Program.cs (use custom ConfigurationManager to load these if desired)
+		var builder = WebApplication.CreateBuilder(args);
+		var key = builder.Configuration["Key"];
+
+Add Configuration Manager (optional)
+===================================
+
+
+Add Custom Logger (optional)
+===================================
+https://learn.microsoft.com/en-us/dotnet/core/extensions/custom-logging-provider
+
+
+Finally, add any models into the application database you want with DbSet<Model> and run Add-Migration to update existing ApplicationDbContext that inherits from IdentityDbContext
+===================================
+
+
+Some Notes
+===================================
+ (NOT APPLICABLE FOR THIS APP, BUT GOOD TO KNOW)
+ - When creating a composite key, you must specify the following in the ApplicationDbContext class, you cannot simply use data annotations
+		/*
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<UserToEntity>().HasKey(u => new { u.Id, u.EntityId });
+        }
+        */
+
+
+
+
+
+
+
+

@@ -1,0 +1,96 @@
+﻿@using BudgetApp.ViewModels.CostCategoryViewModels;
+@model List<BudgetToActualVM>
+
+<div class="slide" style="display: none">
+    <div>
+        <h1 class="text-theme text-center mt-4 mb-2">Budget To Actual</h1>
+    </div>
+
+    @{
+        if(Model.Count == 0)
+        {
+            <div class="row mt-5 text-center">
+                <div class="col-12 h6 text-theme">
+                    [No Data Available]
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    @foreach (BudgetToActualVM category in Model)
+                    {
+                        <div class="h6 mt-2">
+                            @category.Name
+                        </div>
+                        <div class="bg-white rounded-3 border m-0 p-0" style="cursor: pointer">
+                            @{
+                                if (category.OverBudget)
+                                {
+                                    var deficitAmount = String.Format("{0:N0}%", category.DeficitPercent);
+                                    var remainingAmount = String.Format("{0:N0}%", (100 - category.DeficitPercent));
+                                    <div class="progress p-0 toggler clickable" style="height: 5vh">
+                                        <div class="progress-bar py-2 loss-amount" style="width: @deficitAmount;"></div>
+                                        <div class="progress-bar py-2 remaining-amount" style="width: @remainingAmount;"></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    var spentAmount = String.Format("{0:N0}%", category.SpentPercent);
+                                    var savingsAmount = String.Format("{0:N0}%", 100 - category.SpentPercent);
+                                    <div class="progress p-0 toggler clickable" style="height: 5vh">
+                                        <div class="progress-bar py-md-5 py-2 spent-amount" style="width: @spentAmount;"></div>
+                                        <div class="progress-bar py-md-5 py-2 remaining-amount" style="width: @savingsAmount;"></div>
+                                    </div>
+                                }
+                                var profit = category.BudgetedAmount - category.SpentAmount;
+                                <div class="p-0 border-bottom border-start border-end border-1 rounded-bottom text-theme toggle-detail" style="display: none">
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            Budgeted
+                                        </div>
+                                        <div class="col-4">
+                                            Spent
+                                        </div>
+                                        <div class="col-4">
+                                            @if (profit >= 0)
+                                            {
+                                                @Html.Label("Savings", "Savings", new { @class = "savings-text"})
+                                            }
+                                            else
+                                            {
+                                                @Html.Label("Loss", "Loss", new { @class = "loss-text"})
+                                            }
+                                        </div>
+                                    </div>
+                                    <hr class="p-0 m-0" />
+                                    <div class="row m-0 text-center">
+                                        <div class="col-4">
+                                            <div class="p-1">
+                                                @String.Format("${0:N2}", category.BudgetedAmount)
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="p-1">
+                                                @String.Format("${0:N2}", category.SpentAmount)
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            @{
+                                                var textColor = profit >= 0 ? "savings-text" : "loss-text";
+                                                <div class="p-1 @textColor">
+                                                    @String.Format("${0:N2}", profit)
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,174 @@
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  background-color: #fafffe;
+  margin-bottom: 60px;
+}
+
+/*Theme colors to implement later*/
+.theme{
+    --teal: #59C9A5;
+    --complement: #C8A5CE;
+}
+
+.root {
+    --primary: #59C9A5;
+    --complement: #C8A5CE;
+    --error: #a95365;
+    --text: #48B894;
+    --text-contrast: #FFFFFF;
+    --site-background: #FFFFFF;
+}
+
+.light {
+    --primary: #59C9A5;
+    --complement: #8dd3e0;
+    --error: #a95365;
+    --text: #48B894;
+    --text-contrast: #FFFFFF;
+    --site-background: #FFFFFF;
+}
+
+.dark {
+    --primary: #59C9A5;
+    --text: #555555;
+    --site-background: #158461;
+}
+
+.border-theme {
+    border: solid .05rem;
+    border-color: var(--primary);
+}
+
+.icon-theme {
+    color: var(--primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.icon-theme-contrast {
+    color: var(--text-contrast);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.text-theme {
+    color: var(--primary);
+}
+
+.fill-theme {
+    background-color: var(--primary);
+    color: var(--text-contrast);
+}
+
+.error-theme{
+    background-color: var(--error);
+    color: var(--text-contrast);
+}
+
+.fill-complement
+{
+    background-color: var(--complement);
+    color: var(--text-contrast);
+}
+
+.header-theme {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-contrast);
+}
+
+.row-theme {
+    color: var(--text) !important;
+}
+
+.btn-theme {
+    background-color: var(--primary);
+    color: var(--text-contrast);
+}
+
+.btn-theme-contrast
+{
+    background-color: white;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.nav-link.nav-theme.active {
+    background-color: var(--primary);
+    color: var(--text-contrast);
+}
+
+.nav-link.nav-theme
+{
+    color: var(--text);
+}
+
+.disabled-input{
+    background-color: lightgray;
+}
+
+/* Dashboard Themes */
+.loss-amount{
+    background-color: lightpink;
+}
+
+.budget-amount{
+    background-color: #4d716c;
+}
+
+.spent-amount {
+    background-color: var(--primary);
+}
+
+.remaining-amount {
+    background-color: lightgray;
+}
+
+.loss-text
+{
+    color: #dc6161;
+}
+
+.savings-text
+{
+    color: var(--primary);
+}
+
+.slide-container{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    left: 0;
+}
+
+a{
+    color: var(--primary);
+}
+
+a:hover{
+    color: darkgreen;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem var(--primary);
+}

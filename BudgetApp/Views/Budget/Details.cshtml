@@ -1,0 +1,168 @@
+﻿@using BudgetApp.Areas.Identity.Models;
+@using BudgetApp.ViewModels.CostCategoryViewModels;
+@using BudgetApp.ViewModels.FixedCostViewModels;
+@using BudgetApp.ViewModels.IncomeViewModels;
+@using BudgetApp.ViewModels.UserViewModels;
+@using BudgetApp.ViewModels;
+@using BudgetApp.ViewModels.VariableCostViewModels;
+@model BudgetApp.ViewModels.BudgetViewModels.BudgetDetailVM
+
+@{
+    ViewData["Title"] = "Budget";
+}
+
+<h1 class="text-theme">Budget</h1>
+
+<div class="row">
+    <div class="col-6 toggler mb-4">
+        <button class="btn btn-theme">
+            View Summary
+        </button>
+    </div>
+    <div class="row mx-0 text-theme toggle-detail" style="display: none">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-5 col-6 p-0">
+                    Total Income
+                </div>
+                <div class="col-md-3 col-6 text-center p-0">
+                    @Model.Incomes.Sum(i => i.Amount).GetCurrencyFormat()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-6 p-0">
+                    Monthly Expenses
+                </div>
+                <div class="col-md-3 col-6 text-center p-0">
+                    @Model.FixedCosts.Sum(f => f.Amount).GetCurrencyFormat()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-6 p-0">
+                    Savings Goal
+                </div>
+                <div class="col-md-3 col-6 text-center p-0">
+                    @Model.BudgetVM.MonthlySavingsGoal.GetCurrencyFormat()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-6 p-0">
+                    Amount Allocated To Expenses
+                </div>
+                <div class="col-md-3 col-6 text-center p-0">
+                    @Model.CostCategories.Sum(c => c.BudgetedAmount).GetCurrencyFormat()
+                </div>
+            </div>
+            <hr class="col-md-7 col-12" />
+            <div class="row">
+                <div class="col-md-5 col-6 p-0">
+                    Expense Allocation Remaining
+                </div>
+                <div class="col-md-3 col-6 text-center p-0">
+                    @Model.RemainingCategoryAllocation.GetCurrencyFormat()
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+
+@Html.EditorFor(m => m.BudgetVM)
+
+@await Html.PartialAsync("~/Views/Income/_EntityIncomeTable.cshtml", new EntityCollectionVM<IncomeVM>()
+{
+    EntityId = Model.BudgetVM.BudgetId,
+    EntityType = nameof(Budget),
+    EntityItems = Model.Incomes,
+    ReturnUrl = Model.BudgetVM.ReturnUrl
+})
+
+@await Html.PartialAsync("~/Views/FixedCost/_EntityFixedCostTable.cshtml", new EntityCollectionVM<FixedCostVM>()
+{
+    EntityId = Model.BudgetVM.BudgetId,
+    EntityType = nameof(Budget),
+    EntityItems = Model.FixedCosts,
+    ReturnUrl = Model.BudgetVM.ReturnUrl
+})
+
+@await Html.PartialAsync("~/Views/CostCategory/_EntityCostCategoryTable.cshtml", new EntityCollectionVM<CostCategoryVM>()
+{
+    EntityId = Model.BudgetVM.BudgetId,
+    EntityType = nameof(Budget),
+    EntityItems = Model.CostCategories,
+    ReturnUrl = Model.BudgetVM.ReturnUrl
+})
+
+<h3 class="text-theme mt-5">Options</h3>
+<hr class="text-theme mb-2"/>
+@{
+    if (ViewBag.UserIsOwner)
+    {
+        @await Html.PartialAsync("~/Views/User/_EntityUserTable.cshtml", new EntityCollectionVM<UserRoleDetailVM>()
+        {
+            EntityId = Model.BudgetVM.BudgetId,
+            EntityType = nameof(Budget),
+            EntityItems = Model.UserRoles,
+            ReturnUrl = Model.BudgetVM.ReturnUrl
+        })
+    }
+}
+
+<hr class="text-theme mt-5"/>
+<div class="row mx-0">
+    <button class="btn btn-theme col-md-3 col-5 me-2" onclick="ShowConfirmModal('Are you sure you want to leave the budget?', '@Url.Action("Leave", "Budget", new { budgetId = Model.BudgetVM.BudgetId })')">Leave Budget</button>
+    @if (ViewBag.UserIsOwner)
+    {
+        <button class="btn btn-theme col-md-3 col-5" onclick="ShowConfirmModal('Are you sure you want to delete the budget?', '@Url.Action("Remove", "Budget", new { budgetId = Model.BudgetVM.BudgetId })')">Delete Budget</button>
+    }
+</div>
+
+@section Scripts
+{
+
+    @await Html.PartialAsync("~/Views/Shared/CustomScripts/_DetailToggler.cshtml")
+
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $(".btn-edit-save").click(function()
+            {
+                if($(this).hasClass("save-allowed"))
+                {
+                    $("#form-monthly-savings").submit();
+                }
+                else
+                {
+                    AllowSave();
+                }
+            });
+
+            $(".btn-cancel").click(function()
+            {
+                Cancel();
+            })
+
+            function AllowSave()
+            {
+                $(".btn-edit-save").text("Save");
+                $(".btn-edit-save").addClass("save-allowed");
+                $(".savings-input").removeClass("disabled-input");
+                $(".savings-input").removeAttr("disabled");
+                $(".btn-cancel").show();
+            }
+
+
+            function Cancel()
+            {
+                $(".btn-edit-save").text("Edit");
+                $(".btn-edit-save").removeClass("save-allowed");
+                $(".savings-input").addClass("disabled-input");
+                $(".savings-input").attr("disabled");
+                $(".btn-cancel").hide();
+            }
+
+        });
+    </script>
+}
+

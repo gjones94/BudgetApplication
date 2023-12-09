@@ -1,0 +1,15 @@
+﻿@model BudgetApp.ViewModels.CostCategoryViewModels.CostCategoryVM
+
+@Html.HiddenFor(m => m.CostCategoryId)
+
+<div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+    @Html.LabelFor(m => m.Name, new { @class = "text-theme" })
+    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Category Name"})
+    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger"})
+</div>
+
+<div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+    @Html.LabelFor(m => m.BudgetedAmount, new { @class = "text-theme" })
+    @Html.TextBoxFor(m => m.BudgetedAmount, new { @class = "form-control currency", @placeholder = "Amount" })
+    @Html.ValidationMessageFor(m => m.BudgetedAmount, "", new { @class = "text-danger"})
+</div>

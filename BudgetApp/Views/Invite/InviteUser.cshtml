@@ -1,0 +1,18 @@
+﻿@model BudgetApp.Models.InviteToEntity
+
+<form asp-action="InviteUser", asp-controller="Invite" method="post">
+    <div class="row mb-3">
+        <input type="hidden" asp-for="@Model.EntityId"/>
+        <input type="hidden" asp-for="@Model.EntityType"/>
+        <input type="hidden" asp-for="@Model.InviterUserId"/>
+        <input type="hidden" asp-for="@Model.ReturnUrl"/>
+        <label asp-for="@Model.InvitedUserEmail" class="form-label text-theme">@Html.DisplayNameFor(m => m.InvitedUserEmail)</label>
+        <div class="col-md-4 col-8">
+            <input asp-for="@Model.InvitedUserEmail" class="form-control col-md-3 col-6"/>
+            <span asp-validation-for="@Model.InvitedUserEmail" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-theme">Invite</button>
+    </div>
+</form>

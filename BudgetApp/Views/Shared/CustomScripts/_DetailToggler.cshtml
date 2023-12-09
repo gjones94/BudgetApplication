@@ -1,0 +1,17 @@
+﻿<script type="text/javascript">
+    $(document).ready(function(){
+         $(".toggler").click(function()
+         {
+             //search children
+            let element = $(this).find(".toggle-detail");
+
+            if(element.length == 0)
+            {
+                //search neighbor
+                element = $(this).next(".toggle-detail");
+            }
+
+            element.slideToggle(250);
+         });
+    });
+</script>

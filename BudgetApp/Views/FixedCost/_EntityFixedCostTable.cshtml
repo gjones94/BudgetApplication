@@ -1,0 +1,61 @@
+﻿@using BudgetApp.ViewModels;
+@using BudgetApp.ViewModels.FixedCostViewModels;
+@model EntityCollectionVM<FixedCostVM>
+
+<div class="my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <label class="h5 text-theme">Monthly Costs</label>
+        </div>
+    </div>
+    <div class="row m-0 header-theme rounded-2 align-items-center border text-center py-2">
+        <div class="col-4">
+            Description
+        </div>
+        <div class="col-4">
+            Amount
+        </div>
+        <div class="col-3 offset-1">
+            <a href="@Url.Action("Create","FixedCost", new { budgetId = Model.EntityId, entityType = Model.EntityType, returnUrl = Model.ReturnUrl })">
+                <i class="bi icon-theme-contrast bi-plus-circle"></i>
+            </a>
+        </div>
+    </div>
+
+    @if (Model.EntityItems.Count() == 0)
+    {
+        <div class="row m-0 row-theme rounded-2 border text-center py-2">
+            <div class="col-12">
+                No Fixed Costs to Display
+            </div>
+        </div>
+    }
+    else
+    {
+        foreach (FixedCostVM fixedCost in Model.EntityItems)
+        {
+            <div class="row m-0 row-theme rounded-2 align-items-center border text-center py-2">
+                <div class="col-4">
+                    @fixedCost.Description
+                </div>
+                <div class="col-4">
+                    @fixedCost.Amount.GetCurrencyFormat()
+                </div>
+                <div class="col-3 offset-1">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="@Url.Action("Edit", "FixedCost", new { fixedCostId = fixedCost.FixedCostId, returnUrl = Model.ReturnUrl})">
+                                <i class="bi icon-theme bi-pencil-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a onclick="ShowConfirmModal('Are you sure you want to delete this item?', '@Url.Action("Remove", "FixedCost", new { fixedCostId = fixedCost.FixedCostId, returnUrl = Model.ReturnUrl })')">
+                                <i class="bi icon-theme bi-trash" style="font-size: 1.5rem"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

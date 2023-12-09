@@ -1,0 +1,53 @@
+﻿@model BudgetApp.ViewModels.HomeViewModels.MenuVM
+
+
+<div class="row m-0 text-center mt-lg-5">
+    <div class="col-md-3 col-12 my-3">
+        <div>
+            <a href="@Url.Action("Index", "Dashboard")">
+                <i class="bi icon-theme bi-clipboard-pulse" style="font-size: 8rem"></i>
+            </a>
+        </div>
+        <div>
+            <label class="h2 text-theme">
+                Dashboard
+            </label>
+        </div>
+    </div>
+    <div class="col-md-3 col-12 my-3">
+        <div>
+            <a href="@Url.Action("Create", "VariableCost", new { budgetId = Model.BudgetId, returnUrl = Model.ReturnUrl })">
+                <i class="bi icon-theme bi-cash-coin" style="font-size: 8rem"></i>
+            </a>
+        </div>
+        <div>
+            <label class="h2 text-theme">
+                New Purchase
+            </label>
+        </div>
+    </div>
+    <div class="col-md-3 col-12 my-3">
+        <div>
+            <a href="@Url.Action("Details", "Budget")">
+                <i class="bi icon-theme bi-piggy-bank-fill" style="font-size: 8rem"></i>
+            </a>
+        </div>
+        <div>
+            <label class="h2 text-theme">
+                Budget
+            </label>
+        </div>
+    </div>
+    <div class="col-md-3 col-12 my-3">
+        <div>
+            <a href="@Url.Action("Index", "VariableCost")">
+                <i class="bi icon-theme bi-clock-history" style="font-size: 8rem"></i>
+            </a>
+        </div>
+        <div>
+            <label class="h2 text-theme">
+                Purchase History
+            </label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+@using BudgetApp.Areas.Identity;
+@inject ICurrentUserAccessor currentUserAccessor
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BudgetApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="~/BudgetApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="light">
+    @if (currentUserAccessor.IsAuthenticated)
+    {
+        <header>
+            <nav class="navbar navbar-expand fill-theme border-bottom box-shadow mb-3">
+                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Menu">
+                    <i class="bi icon-theme-contrast bi-house-fill" style="font-size: 2.4rem"></i>
+                </a>
+                <partial name="_LoginPartial" />
+            </nav>
+        </header>
+    }
+    <div class="container mt-3">
+        <main role="main" class="pb-3">
+            @RenderBody()
+            @await Html.PartialAsync("_Modals.cshtml")
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/hammer/hammer.min.js"></script>
+    <script src="~/lib/charts/chart.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

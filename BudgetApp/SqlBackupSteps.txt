@@ -1,0 +1,22 @@
+﻿Backup
+1. Go to C:\ProgramFiles\MySQL\[Mysql Server v.X]\bin
+
+2. mysqldump -u root -p [databaseToBackup] > backupfile.sql
+
+
+Restore
+1. Create a database schema (if you don't already have one)
+
+2. Go to C:\ProgramFiles\MySQL\[Mysql Server v.X]\bin
+
+3. mysql -u root -p [database from step 1] < backupfile.sql
+
+
+Testing backup
+1. Do Backup Steps
+2. Do Restore Steps
+3. Stop webserver for site
+4. Go to the AppSettings.json file
+5. Change current database to "testrestore" database created in the restore phase
+6. Change data in that restore database
+7. start server and check site to ensure backup is in place with the change you made.

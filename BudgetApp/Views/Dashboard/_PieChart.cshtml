@@ -1,0 +1,115 @@
+﻿@model BudgetApp.ViewModels.DashboardViewModels.DashboardVM
+
+
+
+<div class="slide m-4">
+    <div>
+        <h1 class="text-theme text-center mb-2">Budget Ratios</h1>
+    </div>
+
+    @{
+        if(Model.Income == 0 || Model.VariableCosts == 0 || Model.FixedCosts == 0)
+        {
+            <div class="row mt-5 text-center">
+                <div class="col-12 h6 text-theme">
+                    [No Data Available]
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="d-flex col-md-6 col-12 offset-md-3">
+                    <canvas id="pieChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        }
+    }
+    
+</div>
+
+<script type="text/javascript">
+
+    function DrawPieChart() {
+
+        //Model data
+        var income = @Model.Income;
+        var savings = @Model.SavingsActual;
+        var expenses = @Model.VariableCosts;
+        var fixedCosts = @Model.FixedCosts;
+
+        //chart data
+        var headers = ["Income", "Expenses", "Fixed Costs"];
+        var values = [income, expenses, fixedCosts]; //remaining income is savings for us
+        var valueColors = ["#59C9A5", "#fd5b8d", "#C8A5CE"];
+
+        const data = {
+            labels: headers,
+            datasets: [{
+                data: values,
+                backgroundColor: valueColors
+            }]
+        }
+
+        const options = {
+            title: {
+                display: true,
+                text: "Income/Expenses"
+            },
+            cutout: "50%",
+            responsive: true, //needed for sizing
+            maintainAspectRatio: false, //needed for set sizing
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let label = context.dataset.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed !== null) {
+                                label += "$" + context.formattedValue;
+                            }
+                            return label;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: true
+                    },
+                    display: true,
+                    position: 'bottom'
+                }
+            }
+        }
+
+        const drawsavings = {
+            id: "drawsavings",
+            afterDraw: (chart, args, options) => {
+                const { ctx, chartArea: { width, height, top } } = chart;
+                ctx.save();
+
+                var xCenter = width / 2;
+                var yCenter = (height / 2) + top;
+                var formatSavings = savings >= 0 ? "+ $" : "- $";
+                ctx.fillStyle = savings >= 0 ? "#A8DCCC" : "#ffadbc";
+                var header = "";
+
+                ctx.font = "bolder 20px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(header, xCenter, yCenter - 20);
+                ctx.fillText(formatSavings + Math.abs(savings).toLocaleString("en-US"), xCenter, yCenter);
+            }
+        }
+
+        new Chart("pieChart", {
+            type: "doughnut",
+            data,
+            options,
+            plugins: [drawsavings]
+        });
+    }
+
+</script>

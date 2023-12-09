@@ -1,0 +1,27 @@
+﻿@model BudgetApp.ViewModels.VariableCostViewModels.VariableCostCreateEditVM
+
+<div class="row text-theme text-center mb-4">
+    <h1 class="display-1">
+        Purchase
+    </h1>
+</div>
+<form method="post" asp-action="Edit" asp-controller="VariableCost">
+    <input asp-for="@Model.ReturnUrl" type="hidden" />
+    <input asp-for="@Model.ParentId" type="hidden" />
+    <div class="form-row my-2">
+        @Html.EditorFor(m => m.VariableCostVM)
+    </div>
+    <div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+        @Html.LabelFor(m => m.AvailableUsers, new { @class = "text-theme"})
+        @Html.DropDownListFor(m => m.UserId, new SelectList(Model.AvailableUsers, "Id", "FullName"), new { @class = "form-control"})
+    </div>
+    <div class="form-group col-md-4 offset-md-4 col-8 offset-2 my-2">
+        @Html.LabelFor(m => m.AvailableCategories, new { @class = "text-theme"})
+        @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.AvailableCategories, "EntityId", "Name"), new { @class = "form-control"})
+        @Html.ValidationMessageFor(m => m.AvailableCategories, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-row mt-5">
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme mb-4" type="submit">Save</button>
+        <button class="col-md-4 offset-md-4  col-8 offset-2 p-md-3 p-2 btn btn-theme" type="button" onclick="location.href='@Model.ReturnUrl'">Cancel</button>
+    </div>
+</form>
