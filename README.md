@@ -1,3 +1,4 @@
+<h1>Family Budget Application (https://budget4family.com) </h1>
 This is a family friendly budget app that I was inspired to make after getting married to help my wife and I track our monthly finances.
 We are both hesitant to connect our financial institutions to any 3rd party apps, and so I decided to make an app that we can track our expenses. Although it
 uses manual entry to avoid a direct connection to our bank, it is quite handy at helping us customize a budget and use custom expense categories and a dashboard for financial projections
