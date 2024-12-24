@@ -1,4 +1,4 @@
-<h1>Family Budget Application (https://budget4family.com) </h1>
+<h1>Family Budget Application</h1>
 This is a simple budget app that I was inspired to make after getting married to help my wife and I track our monthly finances.
 We are both hesitant to connect our financial institutions to any 3rd party apps, and so I decided to make an app that we can track our expenses. It has proven quite helpful in helping us stay on budget each month.
 <br>
