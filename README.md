@@ -2,9 +2,8 @@
 This is a family friendly budget app that I was inspired to make after getting married to help my wife and I track our monthly finances.
 We are both hesitant to connect our financial institutions to any 3rd party apps, and so I decided to make an app that we can track our expenses. It has proven quite helpful in helping us stay on budget each month.
 
-<br>
-*Home Screen*
-<br>
+*Home Screen*<br>
+
 ![image](https://github.com/gjones94/BudgetApplication/assets/141204905/e67f354b-13f0-4d32-8b85-5d13336a0e37)
 
 *Dashboard Ratio*<br>
